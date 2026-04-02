@@ -18,9 +18,9 @@ For people like myself who have a keen interest in machine learning experimentat
 
 I'm currently wrapping up my PhD in quantum computing at Silicon Quantum Computing, and I'm excited to shift into AI research afterward. This page documents my attempt to exploit these three boons to get up to date in the field for my imminent re-entry into the industry.
 
-### Little Language Learners
+### Little Language Models (lLMs)
 The best way to learn is to do. I recently found out that hiring RTX 4090s on runpod costs only $0.59 an hour and figured, hey, I can probably afford 30 minutes of training. So I decided to try to build the best language model I can with a maximum of 30 minutes training time (excluding pre-train tuning). To do this, I created a tokenizer, downloaded the SimpleStories dataset, and wrote a little package to train some models. Read about the setup [here](), and see below to read about each model.
-### LLM Leaderboard
+### lLM Leaderboard
 <table>
   <thead>
     <tr>
