@@ -1,5 +1,5 @@
 ---
-title: Home / Curriculum Vitae
+title: About
 layout: page
 ---
 
