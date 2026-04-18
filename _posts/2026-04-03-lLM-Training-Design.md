@@ -24,7 +24,7 @@ To optimise the learning rate for a model, a reasonable method is to run the tra
 
 ### Vocab Size
 
-Now that the learning rate optimisation process has been decided, it's time to choose the vocabulary size. For this, I kept the tokens per parameter at 20 and slotted in the learning rate optimisation process. I trained unigram tokenizers on 10000000 rows of BabyLM with vocabulary sizes of 1K, 2K, 3K, 4K, 6K, 8K, and 10K. I then ran training experiments with each vocabulary size. The following graph shows the final validation loss as a function of vocabulary size.
+Now that the learning rate optimisation process has been decided, it's time to choose the vocabulary size. For this, I kept the tokens per parameter at 20 and slotted in the learning rate optimisation process. I trained unigram tokenizers on 10000000 rows of BabyLM with vocabulary sizes of 1K, 2K, 3K, 4K, 6K, 8K, and 10K, 12K, 15K, 20K. I then ran training experiments with each vocabulary size. Unfortunately, validation cross-entropy loss is not directly comparable between different vocabulary sizes because an increased vocabulary size increases the total amount of possible entropy, and additional tokens end up being longer on average, resulting in a decreased number of tokens over the whole validation set. To account for this, these results are compared using bits per byte (BPB), which is computed using the average bits per token over the validation set for each vocab size. The results are as follows. 
 
 
 

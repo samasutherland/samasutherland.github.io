@@ -1,5 +1,5 @@
 ---
-layout: landing
+layout: page
 ---
 
 Add a short introduction here (background, interests, current work).
