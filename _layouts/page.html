@@ -1,0 +1,17 @@
+---
+layout: base
+---
+<article class="post">
+
+  {% assign _page_title = page.title | strip %}
+  {% if _page_title != "" %}
+  <header class="post-header">
+    <h1 class="post-title">{{ _page_title | escape }}</h1>
+  </header>
+  {% endif %}
+
+  <div class="post-content">
+    {{ content }}
+  </div>
+
+</article>
