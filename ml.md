@@ -1,5 +1,5 @@
 ---
-title: Machine Learning
+title: Little Language Models
 layout: page
 permalink: /ml/
 ---
@@ -58,9 +58,9 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
 
 ### Posts
 <ul class="post-list">
-  {% assign ml_posts = site.posts | where_exp: "p", "p.tags contains 'ml'" %}
+  {% assign ml_posts = site.categories.ml %}
   {% if ml_posts and ml_posts.size > 0 %}
-    {% assign ml_posts = ml_posts | sort: "date" %}
+    {% assign ml_posts = ml_posts | sort: "date" | reverse %}
     {% for post in ml_posts %}
       <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a> — {{ post.date | date_to_string }}</li>
     {% endfor %}

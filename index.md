@@ -1,7 +1,12 @@
 ---
-# Feel free to add content and custom Front Matter to this file.
-# To modify the layout, see https://jekyllrb.com/docs/themes/#overriding-theme-defaults
-
-layout: home
+title: Home / Curriculum Vitae
+layout: page
 ---
-Where does this end up?
+
+## About me
+
+Add a short introduction here (background, interests, current work).
+
+## Curriculum Vitae
+
+Add your CV here—a summary, timeline, or a link to a PDF.
