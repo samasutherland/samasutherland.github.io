@@ -28,7 +28,7 @@ Now that the learning rate optimisation process has been decided, it's time to c
 
 ### Tokens per parameter
 
-One of the major milestones of recent AI research was the chinchilla series of experiments, in which they demonstrated the existence of scaling laws that persist over many orders of magnitude of model sizes. One parameter for which such a scaling law exists is the ratio of tokens to parameter used to train a model given a fixed compute budget. They found it to be around 20, which is the value I have been using for the tests so far. Here, I perform a sweep using the current optimal values to find the 
+One of the major milestones of recent AI research was the chinchilla series of experiments, in which they demonstrated the existence of scaling laws that persist over many orders of magnitude of model sizes. One parameter for which such a scaling law exists is the ratio of tokens to parameter used to train a model given a fixed compute budget. They found it to be around 20, which is the value I have been using for the tests so far. The current logic finds the largest model that can throughput at least 20 tokens per parameter in the 30 minute training window. For the 8K vocab run from before, that resulted in a 21 layer model. I ran a sweep using 
 
 
 
