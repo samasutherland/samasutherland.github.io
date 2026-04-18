@@ -8,20 +8,20 @@ layout: page
 
 ## Education
 
-### UNSW — Doctor of Physics (2021–2026)
+**UNSW — Doctor of Physics (2021–2026)**
 
 *Thesis submitted, under examination*
 
 - Primary supervisor: Prof. Michelle Simmons AC FRS
 
-### University of Oxford — Master of Physics (2015–2019)
+**University of Oxford — Master of Physics (2015–2019)**
 
 *1st class*
 
 - Studied Quantum Information Processing, Theoretical Physics, and Lasers and Optics in my final year
 - Academic scholarships awarded for second and third year results
 
-### Wanstead High School — A levels and GCSEs
+**Wanstead High School — A levels and GCSEs**
 
 *2013–2015:* Maths A*, Further Maths A*, Physics A*, Chemistry A, Music A  
 
@@ -31,7 +31,7 @@ layout: page
 
 ## Experience
 
-### Silicon Quantum Computing — PhD student (2021–2026)
+**Silicon Quantum Computing — PhD student (2021–2026)**
 
 University of New South Wales, Sydney
 
@@ -39,7 +39,7 @@ University of New South Wales, Sydney
 - Created a differentiable simulator using PyTorch for tuning and designing quantum devices
 - Derived and implemented an end-to-end differentiable pipeline for eigensolving in tensor network algorithms
 
-### Optiver — Quantitative researcher intern (November 2023 – February 2024)
+**Optiver — Quantitative researcher intern (November 2023 – February 2024)**
 
 Sydney
 
@@ -47,27 +47,27 @@ Sydney
 - Evaluated the viability of a news-based trading signal using Bloomberg headline data
 - Developed improved estimators of intermediate-scale volatility in global equity indices
 
-### Ocado Technology — Innovation engineer (April – December 2020)
+**Ocado Technology — Innovation engineer (April – December 2020)**
 
 Hatfield
 
 - Applied representation learning techniques to Ocado product image data
 - Evaluated multiphysics simulation packages and advised on their usage
 
-### Ocado Technology — Machine learning internship (July – December 2019)
+**Ocado Technology — Machine learning internship (July – December 2019)**
 
 Hatfield
 
 - Built, tested and integrated an image segmentation model on a robot platform for autonomous navigation in complex environments
 
-### University of Oxford — MPhys research project (2018–2019)
+**University of Oxford — MPhys research project (2018–2019)**
 
 Oxford
 
 - Trained a model on satellite data to detect Pockets of Open Cells in clouds on an unprecedented scale
 - Paper resulting from subsequent analysis won best paper award at ICML 2019
 
-### Centre for Applied Superconductivity — Summer research project
+**Centre for Applied Superconductivity — Summer research project**
 
 12 weeks in 2018, University of Oxford — simulation using COMSOL
 
@@ -75,7 +75,7 @@ Oxford
 - Worked autonomously when my supervisor left for a month to perform research abroad: completed the tasks she had set and used the results of those to guide the research
 - Worked closely with the team to develop simulations, meeting with them and presenting my work every fortnight
 
-### Perm State University — Computational fluid dynamics internship
+**Perm State University — Computational fluid dynamics internship**
 
 6 weeks in 2017, Russia
 
