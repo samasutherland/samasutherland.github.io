@@ -1,9 +1,6 @@
 ---
-title: About
-layout: page
+layout: landing
 ---
-
-## About me
 
 Add a short introduction here (background, interests, current work).
 

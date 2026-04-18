@@ -2,8 +2,8 @@ title: Sam Sutherland
 email: sam.sutherland@hotmail.co.uk
 description: >-
   Sam Sutherland — personal site, CV, and notes on small language models.
-domain: samasutherland.github.io
-url: https://samasutherland.github.io
+domain: snoodmcguinness.github.io
+url: https://snoodmcguinness.github.io
 baseurl: ""
 
 theme: minima
@@ -14,18 +14,17 @@ author:
 
 minima:
   nav_pages:
-    - index.md
     - ml.md
   social_links:
     - title: GitHub
       icon: github
-      url: "https://github.com/samasutherland"
+      url: "https://github.com/SnoodMcGuinness"
     - title: LinkedIn
       icon: linkedin
-      url: "https://www.linkedin.com/in/samuel-arthur-sutherland"
+      url: "https://www.linkedin.com/in/<your-handle>"
     - title: Google Scholar
       icon: google-scholar
-      url: "https://scholar.google.com/citations?user=LyD6_9QAAAAJ"
+      url: "https://scholar.google.com/citations?user=<your_id>"
 
 show_excerpts: true
 
