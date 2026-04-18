@@ -1,5 +1,5 @@
 ---
-title: Little Language Models
+title: little Language Models
 layout: page
 permalink: /ml/
 ---

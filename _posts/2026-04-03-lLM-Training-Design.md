@@ -6,30 +6,38 @@ categories: [ml]
 tags: []
 ---
 
-Short teaser paragraph about the experiment. <!--more-->
+# Baseline Transformer
 
-[//]: # (Training a performant language model is a time and cost intensive process that accounts for a significant chunk of the total cost of a large model. Here, the aim is to emulate the process of experimenting with large models, but using small models instead. For this to make sense, all parts of the pipeline should be scaled down. This means using a single GPU, smaller embedding dimensions, a less verbose vocabulary, and less training examples.)
+Every experiment needs a good baseline. For this little Language Model (lLM) series, the baseline performance will be based off a standard transformer. A transformer is a model consisting of attention layers that adjust each token embedding via an all-to-all mechanism that both decides the degree of influence each token should have over each other token, and how that influence should modify each token. Many in-depth descriptions of transformers exist (e.g. [this video](https://www.youtube.com/watch?v=wjZofJX0v4M) and [this blog post](https://www.datacamp.com/tutorial/how-transformers-work).) so I won't rehash that, however I will say that I believe the key mechanism that makes transformers powerful is that, unlike models like convolutional neural networks (CNNs) which hard-code nearest neighbour interaction structure or dense neural networks (DNNs) which assume all features have equal impact on all other features, the effective learnability of the interaction structure allows transformers to more efficiently utilise information. They are extremely efficient to train, using each token in a sequence as an example effectively boosts the batch size by an order of magnitude.
 
-[//]: # ()
-[//]: # (To train smaller language models, some compromises have to be made to the data. Firstly, it has been found that as much as X% of a model's weights are dedicated purely to storing the definitions of words including nouns and proper nouns, so a dataset designed for smaller models must seriously limit the quantity of these types of words. Secondly, the shallower models limit the depth to which complex grammatical structures can be parsed. Finally, ...)
+## Optimising Hyperparameters
 
-[//]: # ()
-[//]: # (Though it may be shocking to some of you, I'm not the first person to come up with the idea of training small models. As such, many datasets have been used to try to train smaller models. A common choice is to take a small subset of wikipedia pages~\cite{}. Unfortunately, wikipedia pages tend to introduce many nouns, taking up valuable space in the embedding feature spaces and tokenizers. )
+I don't think it's a particularly controversial statement that the least fun part of training models is hyperparameter optimisation. I want to minimise the amount that I do this, so this section develops an automated process that tunes the depth of the model and the learning rate. This process is intended to be reused across experiments. While optimum hyperparameters don't necessarily transfer between architectures, I make the assumption that using the majority of hyperparameters tuned for the transformer model will give *good enough* results for comparison in this context. Additionally, since the transformer is so well-established, any disruptor model will have to outperform it by a non-trivial amount, in which case this would likely account for the sub-optimally tuned hyperparameters. That being said, the learning rate will be optimised for all experiments, and the largest batch size possible on the gpu will be automatically detected.
 
-The aim of this package is to train small language models with a budget of 30 minutes training (not inclusive of pre-train tuning).
+The three parameters I optimised for are the learning rate scheduler, the tokens per parameter used to train the model, and the vocabulary size. All other hyperparameters used feasible values typical of models trained on this budget.
 
-To do this 
+### Learning Rate
 
-To train smaller models, 
--- SimpleStories Dataset
--- Pick an embedding dim
--- Vary depth to get tokens/parameter correct
--- 
+Firstly, I investigated the learning rate optimisation process to produce the best results. For these experiments, the token count was set to the chinchilla-optimal 20 tokens per parameter and the vocab size was set to 4K, a value used by a few papers training on BabyLM. I chose to use OneCycleLR as the scheduler, and ran a learning rate sweep over three parameter configurations: one relatively standard OneCycle with the peak 30% through the entire training run, with the initial learning rate divided by 3 and final divided by 10, one aggressive schedule where the peak happens 5% the way through the run, with the initial and final learning rates divided by 10 and 100 respectively, and one medium approach with the peak at 10% and division factors of 6 and 20. The results are shown in the following graph: ![learning_rate_sweeps](figures/learning_rate_sweeps.png)
+
+Where the solid line is the final training loss and the dashed line is the validation loss. All three show a similar behaviour of a gradual decrease and low plateau, followed by a sharp increase in the loss where the training has become unstable. The medium approach achieved the lowest validation loss, while also maintaining the smallest gap between train and validation performance, so this was the method chosen.
+
+To optimise the learning rate for a model, a reasonable method is to run the training for the first x% of steps, and then continue with the option that achieved the best validation loss. However, early performance is not always indicative of final performance and can often indicate an overly high learning rate that finds a poor minimum early on. To investigate the robustness of the early stopping method of tuning the learning rate, I used the learning rate sweep data to calculate the correlation between the validation loss at each step and the final validation loss. If this is high, it gives confidence that a low validation loss at that point will obtain a good final model, while a low correlation would indicate that it is a not a reliable signal. The correlation as a function of step number can be seen below. ![correlation](figures/correlation.png) As expected, the correlation at the very first step has essentially no correlation with the final outcome, while by definition the final step has perfect correlation. The correlation increases over the first 30% of the training steps, then plateaus for the rest of the run. Therefore, 30% would be an ideal time to choose the final learning rate. However, 30% of the full training course is a rather expensive optimisation procedure, and testing a few learning rates would lead to this step taking longer than the full training run, time which could potentially be better spent in *actual* training. Therefore, I am going to choose to determine the learning rate at 20% of the run. While the correlation is significantly weaker here, it allows for five learning rates to be measured in the training budget, and the shallow plateau of the loss curves indicate that the loss is likely to be good enough. Applying this rule to the peak location: 0.1, div factors: 6, 20 learning rate sweep from before, the final learning rate chosen would have been 0.012, obtaining a near optimal final validation loss of 3.16. This learning rate is displayed in the following plot by the vertical line superimposed on the learning rate sweep from earlier.![learning_rate_sweeps_lr_selected](figures/learning_rate_sweeps_lr_selected.png)
+
+### Vocab Size
+
+Now that the learning rate optimisation process has been decided, it's time to choose the vocabulary size. For this, I kept the tokens per parameter at 20 and slotted in the learning rate optimisation process. I trained unigram tokenizers on 10000000 rows of BabyLM with vocabulary sizes of 1K, 2K, 3K, 4K, 6K, 8K, and 10K. I then ran training experiments with each vocabulary size. The following graph shows the final validation loss as a function of vocabulary size.
 
 
 
-## Results
-Findings, charts, tables…
+This is probably better fixed as a ratio between the number of parameters in the encoding and the number in the rest of the model, but to do that would require 
 
-## Takeaways
-Bulleted conclusions.
+### Tokens per parameter
+
+One of the major milestones of recent AI research was the chinchilla series of experiments, in which they demonstrated the existence of scaling laws that persist over many orders of magnitude of model sizes. One parameter for which such a scaling law exists is the ratio of tokens to parameter used to train a model given a fixed compute budget. They found it to be around 20. 
+
+
+
+I realise that vocab size and tokens per parameter are probably tightly coupled
+
+## Full training process
