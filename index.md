@@ -21,11 +21,13 @@ layout: page
 - Studied Quantum Information Processing, Theoretical Physics, and Lasers and Optics in my final year
 - Academic scholarships awarded for second and third year results
 
-### Wanstead High School — A Levels (commented in CV source)
+### Wanstead High School — A levels and GCSEs
 
 *2013–2015:* Maths A*, Further Maths A*, Physics A*, Chemistry A, Music A  
 
 *GCSEs 2008–2013:* 8 A*’s and 4 A’s including A* in Maths, Physics and English Literature
+
+---
 
 ## Experience
 
@@ -65,7 +67,7 @@ Oxford
 - Trained a model on satellite data to detect Pockets of Open Cells in clouds on an unprecedented scale
 - Paper resulting from subsequent analysis won best paper award at ICML 2019
 
-### Centre for Applied Superconductivity — Summer research project (commented in CV source)
+### Centre for Applied Superconductivity — Summer research project
 
 12 weeks in 2018, University of Oxford — simulation using COMSOL
 
@@ -73,12 +75,12 @@ Oxford
 - Worked autonomously when my supervisor left for a month to perform research abroad: completed the tasks she had set and used the results of those to guide the research
 - Worked closely with the team to develop simulations, meeting with them and presenting my work every fortnight
 
-### Perm State University — Computational fluid dynamics internship (commented in CV source)
+### Perm State University — Computational fluid dynamics internship
 
 6 weeks in 2017, Russia
 
 - Communicated effectively with a multi-cultural group of students and professors to maximise the value of the course on simulation techniques
-- Implemented and optimized these techniques in FORTRAN to achieve results comparable to papers in this field
+- Implemented and optimised these techniques in FORTRAN to achieve results comparable to papers in this field
 - Utilised their linux compute cluster to run simulations that I had parallelised myself using MPI
 
 ---
@@ -96,14 +98,12 @@ Oxford
 - Transformer architectures  
 - Differentiable programming  
 - Optimisation methods  
-- *Also listed in CV source (commented):* computer vision, reservoir computing, representation learning  
 
 **Implementation**
 
 - Python  
 - PyTorch  
 - Custom autograd  
-- *Also listed in CV source (commented):* NumPy, LaTeX, Git  
 
 ---
 
