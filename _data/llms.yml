@@ -1,7 +1,7 @@
 # Example rows — edit freely
 - model: GPT-4o
-  score: 89.5
-  notes: Strong reasoning; good on tool-use tasks
-  example generation: ladidadidadiday
-  date: 2025-10-20
+  babylm_loss: 1.42
+  simplstories_loss: 1.19
+  parameter_count: 1800000000
+  example_generation: ladidadidadiday
   link: https://openai.com/
