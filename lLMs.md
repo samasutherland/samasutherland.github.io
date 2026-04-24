@@ -19,8 +19,9 @@ For people like myself who have a keen interest in machine learning experimentat
 I'm currently wrapping up my PhD in quantum computing at Silicon Quantum Computing, and I'm excited to shift into AI research afterward. This page documents my attempt to exploit these three boons to get up to date in the field for my imminent re-entry into the industry.
 
 ### little Language Models (lLMs)
-The best way to learn is to do. I recently found out that hiring RTX 4090s on runpod costs only $0.59 an hour and figured, hey, I can probably afford 30 minutes of training. So I decided to try to build the best language model I can with a maximum of 30 minutes training time (excluding pre-train tuning). To do this, I created a tokenizer, downloaded the SimpleStories dataset, and wrote a little package to train some models. Read about the setup [here](), and see below to read about each model.
+The best way to learn is to do. I recently found out that hiring RTX 4090s on runpod costs only $0.59 an hour and figured, hey, I can probably afford 30 minutes of training. So I decided to try to build the best language model I can with a maximum of 30 minutes training time (excluding pre-train tuning). To do this, I created a tokenizer, downloaded the SimpleStories dataset, and wrote a little package to train some models. You can read more about that [here]({{ '/2026/04/03/lLM-Training-Design.html' | relative_url }}), and see below to read about each model.
 ### lLM Leaderboard
+<p><em>Click any column header to sort. Click again to reverse.</em></p>
 <style>
   #llm-leaderboard thead th {
     cursor: pointer;
@@ -40,16 +41,16 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
     <tr>
       <th scope="col" data-sort-col="0" data-sort-type="number">Rank</th>
       <th scope="col" data-sort-col="1" data-sort-type="string">Model</th>
-      <th scope="col" data-sort-col="2" data-sort-type="number">BabyLM loss</th>
-      <th scope="col" data-sort-col="3" data-sort-type="number">SimplStories loss</th>
-      <th scope="col" data-sort-col="4" data-sort-type="number">parameter count</th>
-      <th scope="col" data-sort-col="5" data-sort-type="string">Example Generation</th>
+      <th scope="col" data-sort-col="2" data-sort-type="number">BabyLM param count</th>
+      <th scope="col" data-sort-col="3" data-sort-type="number">BabyLM BPB</th>
+      <th scope="col" data-sort-col="4" data-sort-type="number">SimpleStories param count</th>
+      <th scope="col" data-sort-col="5" data-sort-type="number">SimpleStories BPB</th>
     </tr>
   </thead>
   <tbody>
   {%- assign rows = site.data.llms -%}
   {%- if rows and rows.size > 0 -%}
-    {%- assign rows = rows | sort: "babylm_loss" -%}
+    {%- assign rows = rows | sort: "babylm_bpb" -%}
     {%- for r in rows -%}
       <tr>
         <td data-sort="{{ forloop.index }}">{{ forloop.index }}</td>
@@ -64,10 +65,10 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
             {{ r.model }}
           {%- endif -%}
         </td>
-        <td data-sort="{{ r.babylm_loss }}">{{ r.babylm_loss }}</td>
-        <td data-sort="{{ r.simplstories_loss }}">{{ r.simplstories_loss }}</td>
-        <td data-sort="{{ r.parameter_count }}">{{ r.parameter_count }}</td>
-        <td data-sort="{{ r.example_generation | escape }}">{{ r.example_generation }}</td>
+        <td data-sort="{{ r.babylm_param_count }}">{{ r.babylm_param_count }}</td>
+        <td data-sort="{{ r.babylm_bpb }}">{{ r.babylm_bpb }}</td>
+        <td data-sort="{{ r.simplstories_param_count }}">{{ r.simplstories_param_count }}</td>
+        <td data-sort="{{ r.simplstories_bpb }}">{{ r.simplstories_bpb }}</td>
       </tr>
     {%- endfor -%}
   {%- else -%}
@@ -147,8 +148,11 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
   }
 
   headers.forEach(function (th) {
+    th.setAttribute("tabindex", "0");
+    th.setAttribute("role", "button");
+    th.setAttribute("aria-label", "Sort by " + th.textContent.trim());
     th.setAttribute("title", "Sort by this column");
-    th.addEventListener("click", function () {
+    function sortByHeader() {
       var rows = getRows();
       if (rows.length < 2) return;
 
@@ -173,6 +177,13 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
 
       clearHeaderClasses();
       th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
+    }
+    th.addEventListener("click", sortByHeader);
+    th.addEventListener("keydown", function (e) {
+      if (e.key === "Enter" || e.key === " ") {
+        e.preventDefault();
+        sortByHeader();
+      }
     });
   });
 })();

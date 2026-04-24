@@ -1,7 +1,7 @@
 # Example rows — edit freely
-- model: GPT-4o
-  babylm_loss: 1.42
-  simplstories_loss: 1.19
-  parameter_count: 1800000000
-  example_generation: ladidadidadiday
-  link: https://openai.com/
+- model: Baseline Transformer
+  babylm_param_count: 11M
+  babylm_bpb: 1.33
+  simplestories_param_count: 18M
+  simplestories_loss: 7.3M
+  link: /2026/04/03/lLM-Training-Design.html
