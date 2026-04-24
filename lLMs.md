@@ -67,8 +67,8 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
         </td>
         <td data-sort="{{ r.babylm_param_count }}">{{ r.babylm_param_count }}</td>
         <td data-sort="{{ r.babylm_bpb }}">{{ r.babylm_bpb }}</td>
-        <td data-sort="{{ r.simplstories_param_count }}">{{ r.simplstories_param_count }}</td>
-        <td data-sort="{{ r.simplstories_bpb }}">{{ r.simplstories_bpb }}</td>
+        <td data-sort="{{ r.simplestories_param_count }}">{{ r.simplestories_param_count }}</td>
+        <td data-sort="{{ r.simplestories_bpb }}">{{ r.simplestories_bpb }}</td>
       </tr>
     {%- endfor -%}
   {%- else -%}
