@@ -2,6 +2,6 @@
 - model: Baseline Transformer
   babylm_param_count: 11M
   babylm_bpb: 1.33
-  simplestories_param_count: 18M
-  simplestories_loss: 7.3M
-  link: /2026/04/03/lLM-Training-Design.html
+  simplestories_param_count: 7.3M
+  simplestories_bpb: 0.57
+  link: /ml/2026/04/03/lLM-Training-Design.html
