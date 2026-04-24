@@ -1,11 +1,11 @@
 ---
 layout: page
 ---
-<p style="text-align: center; margin-bottom: 1.25rem;">
+<p style="float: left; margin: 0 1rem 0.75rem 0;">
   <img
     src="{{ '/assets/PXL_20260315_223859133.jpg' | relative_url }}"
     alt="Portrait of Sam Sutherland"
-    style="max-width: 220px; width: 100%; height: auto; border-radius: 10px;"
+    style="width: 220px; max-width: 40vw; height: auto; border-radius: 10px;"
   >
 </p>
 
