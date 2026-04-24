@@ -1,5 +1,5 @@
 # Example rows — edit freely
-- model: Baseline Transformer
+- model: Baseline - Transformer
   babylm_param_count: 11M
   babylm_bpb: 1.33
   simplestories_param_count: 7.3M
