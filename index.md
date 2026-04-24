@@ -9,7 +9,7 @@ layout: page
   >
 </p>
 
-This is my personal website where I host my professional material as well as personal experiments training little Language Models (lLMs).
+This is my personal website where I host my professional material as well as experiments training little Language Models (lLMs).
 
 I'm a quantum computing PhD with experience in numerical methods and applied machine learning. I specialise in differentiable programming and tensor networks, with keen interest in applying these techniques in frontier AI models.
 
