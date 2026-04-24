@@ -34,10 +34,59 @@ Firstly, this could just be the optimal number of tokens per parameter for this 
 
 Secondly, because the format of the dataset introduces a new row for every single line of text, including different utterances of a conversation, I have been creating an IterableDataset where neighbouring rows are merged together as a sequence prior to batching. While this has some local shuffling via a buffer, the data does appear on average in order. In contrast to this, the validation set is constructed from samples interspersed through the whole dataset. Therefore, an increase in tokens per parameter could mean that more of the entire dataset is seen, so while it may not perform as well on examples that it has seen, on average the validation loss improves.
 
-Finally, and I think most likely, is that the accumulated batch size is horribly misconfigured. With the limitation of 30 minutes of training, there are only so many gradient steps that can be performed. That could mean that if the batch size is too high, there simply aren't enough gradient steps to travel from the initialised parameters to a good minimum, and the high tokens per parameter value is prioritising obtaining more descent steps above all else. To investigate this, I ran a sweep of the accumulated batch size, keeping tokens per parameter at the chinchilla value of 20 for now and using the same learning rate sweep as before.
+Finally, and I think most likely, is that the accumulated batch size is horribly misconfigured. With the limitation of 30 minutes of training, there are only so many gradient steps that can be performed. That could mean that if the batch size is too high, there simply aren't enough gradient steps to travel from the initialised parameters to a good minimum, and the high tokens per parameter value is prioritising obtaining more descent steps above all else. To investigate this, I ran a sweep of the accumulated batch size, keeping tokens per parameter at the chinchilla value of 20 for now and using the same learning rate sweep as before. The batch size sweep confirmed my suspicions that the batch size was far to big, with the minimum loss occurring at 51. ![batch_sweep](/assets/img/lLM/batch_size_sweep.png) Rerunning the tokens per parameter sweep, the optimum falls around 70, much closer to the chinchilla expectation. ![token_sweep](/assets/img/lLM/tpp_sweep.png)
 
+At about this point, I've realised that my original intention to save time and money by manually optimising the hyperparameters was a gross miscalculation, and I have actually spent much more time and money doing this than setting up a big optuna run to find the best hyperparameters algorithmically. Also, my manual single-variable sweeps can't find dependencies between hyperparameters, which are probably significant, for example between vocab size and tokens per parameter. Since I *also* want to train these models on the simplestories dataset, I decided to just bite the bullet and spend 10 hours each on training 100 6-minute tests for models on each dataset. It seems a bit silly spending 10 hours tuning the hyperparameters for a 30 minute training procedure, but the intention is to not adjust these hyperparameters across future architecture changes, so it'll help if they're pretty good. It allowed me to also investigate the width of the models by varying the embedding dimension and number of attention heads. The resulting distribution of parameters obtained showed sensible properties, with most having a smooth minimum somewhere in the range. The key exception was the layer number parameter for the BabyLM dataset, which displayed an inverted parabola shape, indicating a bimodal distribution that can perform well at small layer counts or larger layer counts, presumably dependent on one of the other parameters. ![layer_num](/assets/img/lLM/num_layers.png)
 
+The final Optuna-identified parameters for the models are as follows:
 
-I realise that vocab size and tokens per parameter are probably tightly coupled
+| Dataset       | Layer Count | Accumulated Batch Size | Learning Rate | Embedding Dim | Attention Heads | Vocab Size |
+| ------------- | ----------- | ---------------------- | ------------- | ------------- | --------------- | ---------- |
+| BabyLM        | 32          | 32                     | 0.014664      | 192           | 6               | 12000      |
+| SimpleStories | 5           | 64                     | 0.006036      | 288           | 3               | 8000       |
+
+The model for babylm massively prefers increased depth and complexity via its attention heads and vocab size, whereas the SimpleStories prefers a shallow, wide model with more examples processed. This makes sense as the SimpleStories dataset is designed to use minimal, simple vocabulary and simpler grammatical constructions, while the BabyLM dataset is not restricted in its grammar or content.
+
+To evaluate the parameters, I trained two models with each set of hyperparameters (BabyLM-optuna, BabyLM-manual, and SimpleStories-optuna) and averaged the BPB.
+
+| Model                | Bits per Byte |
+| -------------------- | ------------- |
+| BabyLM-optuna        | 1.45          |
+| BabyLM-manual        | 1.33          |
+| SimpleStories-optuna | 0.57          |
+
+Interestingly, the manual search for BabyLM achieves a better final BPB than the optuna search after all. It's reassuring to be reminded of the continued effectiveness of grad student descent. The failure of optuna here could stem from a breakdown of the correlation between 6-minute validation loss and 30-minute validation loss at this wider hyperparameter range, or the fact that BPB is calculated using the average bits per token over the whole training set while the optuna run is validated on only 30 batches. Either way, the manually identified hyperparameters perform better, so those are the ones I'll use. This also implies that SimpleStories could benefit from some manual tuning, but the time, money, and patience budget for hyperparameter tuning are thoroughly exhausted for this project, so we'll stick with what we've got.
 
 ## Full training process
+
+The final training process is then as follows. The model and data parameters are selected from the hyperparameters found from this experiment process for each dataset. During the training run, the number of layers is swept until the tokens per parameter target of 70 for BabyLM and 175 for SimpleStories is achieved. During the layer sweep, the batch size for good utilisation of the GPU is also found. Then, five 6-minute runs are tested to compute the optimum learning rate for the architecture at hand. Finally, the model is trained for 30 minutes and the results stored.
+
+## Baseline Transformer Results
+
+The commits to access the final training runs are here:
+
+BabyLM-manual:
+
+- [seed 100](https://github.com/samasutherland/little-language-models/commit/a5c30b4d31332f04221e5d3172970588f013b6ee)
+- [seed 101](https://github.com/samasutherland/little-language-models/commit/ae1f585e3783ffa3c9b6fe491bdcd2a5b850ae49)
+
+Example generations:
+
+*caitlin stood on the* edge of the cliff. 
+
+*jayden had a jolly good time*, and he was a good swimmer." 
+
+*in japanese culture, women are often* used to be used to make a living.
+
+SimpleStories:
+
+- [seed 100](https://github.com/samasutherland/little-language-models/commit/acbe15faf7cb902b796a2b4fbb77d4f20a73218c)
+- [seed 101](https://github.com/samasutherland/little-language-models/commit/50c8b3142d15be66920af562ae9e25c39bf30d26)
+
+Example generations:
+
+*caitlin stood on the* edge of a cliff. below, a small village lay quiet, with only the sound of waves crashing. a boy named leo stood at the edge, staring into the dark water. he had heard tales of a lost city beneath the waves, a place where dreams came true. with a deep breath, he jumped into the water. the cold water wrapped around him like a blanket, and he swam deeper. as he swam, he saw strange shapes in the shadows. they looked like fish, but they
+
+*jayden had a jolly good time*. a girl named alice loved to bake cookies. one day, she decided to bake a cake for her friends. she wanted to make the best cookies ever. but when she mixed the batter, she forgot to add sugar. "oh no!" she cried. she looked at the mess and felt sad. then, she remembered her mom\'s advice: "don\'t worry, i can fix this!" she took a deep breath and started to work. she mixed the batter and added chocolate chips
+
+*in japanese culture, women are often* seen as they celebrate the harvest festival. they wear bright clothes and dance, celebrating the harvest. among them was a young woman named mia. she was known for her beautiful clothes and her beautiful clothes. but she felt a little lost. she wanted to be part of the festival, but she was afraid. one day, while walking through the market, mia saw a man selling fruits. he was selling fruits and spices. she felt a spark of hope. "i can buy these," she thought
