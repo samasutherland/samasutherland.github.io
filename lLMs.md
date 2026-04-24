@@ -41,9 +41,9 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
     <tr>
       <th scope="col" data-sort-col="0" data-sort-type="number">Rank</th>
       <th scope="col" data-sort-col="1" data-sort-type="string">Model</th>
-      <th scope="col" data-sort-col="2" data-sort-type="number">BabyLM param count</th>
+      <th scope="col" data-sort-col="2" data-sort-type="number">BabyLM<br>param count</th>
       <th scope="col" data-sort-col="3" data-sort-type="number">BabyLM BPB</th>
-      <th scope="col" data-sort-col="4" data-sort-type="number">SimpleStories param count</th>
+      <th scope="col" data-sort-col="4" data-sort-type="number">SimpleStories<br>param count</th>
       <th scope="col" data-sort-col="5" data-sort-type="number">SimpleStories BPB</th>
     </tr>
   </thead>
