@@ -3,7 +3,7 @@ layout: page
 ---
 <p style="float: left; margin: 0 1rem 0.75rem 0;">
   <img
-    src="{{ '/assets/PXL_20260315_223859133_SDR.jpg' | relative_url }}"
+    src="{{ '/assets/profile-sdr.jpg' | relative_url }}"
     alt="Portrait of Sam Sutherland"
     style="width: 220px; max-width: 40vw; height: auto; border-radius: 10px;"
   >
