@@ -6,30 +6,7 @@ permalink: /cv/
 
 *Quantum computing PhD with experience in numerical methods and applied machine learning. I specialise in differentiable programming and tensor networks, with keen interest in applying these techniques in frontier AI models.*
 
-[Download PDF version of this CV]({{ '/assets/Sam-Sutherland-CV-29-03-2026.pdf' | relative_url }})
-
----
-
-## Education
-
-**UNSW — Doctor of Physics (2021–2026)**
-
-*Thesis submitted, under examination*
-
-- Primary supervisor: Prof. Michelle Simmons AC FRS
-
-**University of Oxford — Master of Physics (2015–2019)**
-
-*1st class*
-
-- Studied Quantum Information Processing, Theoretical Physics, and Lasers and Optics in my final year
-- Academic scholarships awarded for second and third year results
-
-**Wanstead High School — A levels and GCSEs**
-
-*2013–2015:* Maths A*, Further Maths A*, Physics A*, Chemistry A, Music A  
-
-*GCSEs 2008–2013:* 8 A*’s and 4 A’s including A* in Maths, Physics and English Literature
+[Download abridged PDF version of this CV]({{ '/assets/Sam-Sutherland-CV-29-03-2026.pdf' | relative_url }})
 
 ---
 
@@ -86,6 +63,29 @@ Oxford
 - Communicated effectively with a multi-cultural group of students and professors to maximise the value of the course on simulation techniques
 - Implemented and optimised these techniques in FORTRAN to achieve results comparable to papers in this field
 - Utilised their linux compute cluster to run simulations that I had parallelised myself using MPI
+
+---
+
+## Education
+
+**UNSW — Doctor of Physics (2021–2026)**
+
+*Thesis submitted, under examination*
+
+- Primary supervisor: Prof. Michelle Simmons AC FRS
+
+**University of Oxford — Master of Physics (2015–2019)**
+
+*1st class*
+
+- Studied Quantum Information Processing, Theoretical Physics, and Lasers and Optics in my final year
+- Academic scholarships awarded for second and third year results
+
+**Wanstead High School — A levels and GCSEs**
+
+*2013–2015:* Maths A*, Further Maths A*, Physics A*, Chemistry A, Music A  
+
+*GCSEs 2008–2013:* 8 A*’s and 4 A’s including A* in Maths, Physics and English Literature
 
 ---
 
