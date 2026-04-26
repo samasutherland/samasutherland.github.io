@@ -2,7 +2,7 @@
 layout: post
 title: "lLM Training Design and Transformer Baseline"
 date: 2026-04-03
-categories: [lLMs]
+categories: [llms]
 tags: []
 ---
 
