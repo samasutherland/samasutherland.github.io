@@ -3,10 +3,10 @@
   babylm_bpb: 1.33
   simplestories_param_count: 7.3M
   simplestories_bpb: 0.57
-  link: /lLMs/2026/04/03/lLM-Training-Design.html
+  link: /llms/2026/04/03/lLM-Training-Design.html
 - model: Latent Attention
   babylm_param_count: 10M
   babylm_bpb: 1.35
   simplestories_param_count: 5.9M
   simplestories_bpb: 0.58
-  link: /lLMs/2026/04/25/Latent-Attention.html
+  link: /llms/2026/04/25/Latent-Attention.html

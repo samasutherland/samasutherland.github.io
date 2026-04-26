@@ -1,7 +1,7 @@
 ---
 title: little Language Models
 layout: page
-permalink: /lLMs/
+permalink: /llms/
 ---
 
 10 years ago, state-of-the-art machine learning was all about coming up with new and innovative architectural changes that injected better inductive bias into models. CNNs, skip connections, GRUs, GNNs... new layers and structural modifications galore dominated the literature, with large leaps in performance stemming from more efficient data representation and large-scale GPU training. Today, with the advent of large language models, natural language processing has a very different research landscape, with the fundamental model architecture (the transformer) largely stable, access to data practically infinite, and priorities switching to inference efficiency for serving models to consumers.

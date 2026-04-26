@@ -15,4 +15,4 @@ I'm a quantum computing PhD with experience in numerical methods and applied mac
 
 Download my [pdf CV]({{ '/assets/Sam-Sutherland-CV-29-03-2026.pdf' | relative_url }}) or view it [on my website]({{ '/cv/' | relative_url }}) (last updated 29/03/2026).
 
-To read about my lLM experiments, click [here]({{ '/lLMs/' | relative_url }}).
+To read about my lLM experiments, click [here]({{ '/llms/' | relative_url }}).
