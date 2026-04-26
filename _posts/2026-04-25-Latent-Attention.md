@@ -60,7 +60,7 @@ I'm actually impressed that the models perform so similarly given the reduction 
 It implies that the latent attention *is* an effective method for reducing parameter counts while retaining accuracy.
 Unfortunately, in this compute-restricted scenario, the overhead introduced by the additional matmuls eliminate any performance gains stemming from reduced parameter counts, resulting in marginally worse performance at fixed compute.
 The performance per parameter is better though, implying that low-rank decompositions can help the performance of models.
-The next step is to find low-rank decompositions that effectively preserve accuracy without impacting performance too much - a tough task given that this method only introduces a single extra matmul per layer!
+The next step is to find low-rank decompositions that effectively preserve accuracy without impacting performance too much - a tough task given that this method only introduces a single extra matmul per layer and yet still doesn't cost more to compute than is saved by the reduction in parameters!
 
 ## Benchmark generations and training commits
 Here are the generations from the standard prompts and the links to the specific commits used to train the models.
