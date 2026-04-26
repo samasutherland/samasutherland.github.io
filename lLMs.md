@@ -80,109 +80,100 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
 (function () {
   var table = document.getElementById("llm-leaderboard");
   if (!table) return;
-  var tbody = table.querySelector("tbody");
-  var headers = table.querySelectorAll("thead th[data-sort-col]");
-  var sortState = { col: null, dir: 1 };
 
-  function rowCells(tr) {
-    return tr && tr.children ? tr.children.length : 0;
+  var tbody = table.tBodies[0];
+  if (!tbody) return;
+
+  var headers = Array.prototype.slice.call(table.querySelectorAll("thead th[data-sort-col]"));
+  var sortState = { col: -1, dir: 1 };
+
+  function parseScaledNumber(value) {
+    var s = String(value || "").trim().replace(/,/g, "");
+    var m = s.match(/^(-?\d*\.?\d+)\s*([kKmMbBtT])?$/);
+    if (!m) return parseFloat(s);
+    var base = parseFloat(m[1]);
+    if (isNaN(base)) return NaN;
+    var suffix = (m[2] || "").toLowerCase();
+    var scale = 1;
+    if (suffix === "k") scale = 1e3;
+    else if (suffix === "m") scale = 1e6;
+    else if (suffix === "b") scale = 1e9;
+    else if (suffix === "t") scale = 1e12;
+    return base * scale;
   }
 
-  function getRows() {
-    return Array.prototype.filter.call(tbody.children, function (tr) {
-      return rowCells(tr) > 1;
-    });
+  function getCellValue(row, col) {
+    var cell = row.cells[col];
+    if (!cell) return "";
+    var raw = cell.getAttribute("data-sort");
+    return raw == null ? cell.textContent.trim() : String(raw).trim();
   }
 
-  function getSortRaw(tr, col) {
-    var td = tr.children[col];
-    if (!td) return "";
-    var v = td.getAttribute("data-sort");
-    return v != null ? String(v) : td.textContent.trim();
-  }
+  function compareRows(a, b, col, type) {
+    var va = getCellValue(a, col);
+    var vb = getCellValue(b, col);
 
-  function compare(a, b, col, type) {
-    var sa = getSortRaw(a, col);
-    var sb = getSortRaw(b, col);
     if (type === "number") {
-      function parseScaledNumber(v) {
-        var s = String(v || "").trim().replace(/,/g, "");
-        var m = s.match(/^(-?\d*\.?\d+)\s*([kKmMbBtT])?$/);
-        if (!m) return parseFloat(s);
-        var base = parseFloat(m[1]);
-        if (isNaN(base)) return NaN;
-        var suffix = (m[2] || "").toLowerCase();
-        var scale = 1;
-        if (suffix === "k") scale = 1e3;
-        else if (suffix === "m") scale = 1e6;
-        else if (suffix === "b") scale = 1e9;
-        else if (suffix === "t") scale = 1e12;
-        return base * scale;
-      }
-      var na = parseScaledNumber(sa);
-      var nb = parseScaledNumber(sb);
+      var na = parseScaledNumber(va);
+      var nb = parseScaledNumber(vb);
       if (!isNaN(na) && !isNaN(nb)) return na - nb;
     }
+
     if (type === "date") {
-      var da = Date.parse(sa);
-      var db = Date.parse(sb);
+      var da = Date.parse(va);
+      var db = Date.parse(vb);
       if (!isNaN(da) && !isNaN(db)) return da - db;
     }
-    return sa.localeCompare(sb, undefined, { numeric: true, sensitivity: "base" });
-  }
 
-  function renumberRank(rows) {
-    rows.forEach(function (tr, i) {
-      var td = tr.children[0];
-      if (!td) return;
-      var n = i + 1;
-      td.textContent = n;
-      td.setAttribute("data-sort", n);
-    });
+    return va.localeCompare(vb, undefined, { numeric: true, sensitivity: "base" });
   }
 
   function clearHeaderClasses() {
-    headers.forEach(function (th) {
-      th.classList.remove("sort-asc", "sort-desc");
+    headers.forEach(function (h) {
+      h.classList.remove("sort-asc", "sort-desc");
     });
   }
 
+  function sortBy(th) {
+    var col = parseInt(th.getAttribute("data-sort-col"), 10);
+    if (isNaN(col)) return;
+    var type = th.getAttribute("data-sort-type") || "string";
+
+    if (sortState.col === col) sortState.dir = -sortState.dir;
+    else {
+      sortState.col = col;
+      sortState.dir = 1;
+    }
+
+    var rows = Array.prototype.slice.call(tbody.querySelectorAll("tr"));
+    if (rows.length < 2) return;
+
+    rows.sort(function (a, b) {
+      return sortState.dir * compareRows(a, b, col, type);
+    });
+
+    rows.forEach(function (row) {
+      tbody.appendChild(row);
+    });
+
+    clearHeaderClasses();
+    th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
+  }
+
   headers.forEach(function (th) {
-    th.setAttribute("tabindex", "0");
+    th.tabIndex = 0;
     th.setAttribute("role", "button");
     th.setAttribute("aria-label", "Sort by " + th.textContent.trim());
     th.setAttribute("title", "Sort by this column");
-    function sortByHeader() {
-      var rows = getRows();
-      if (rows.length < 2) return;
 
-      var col = parseInt(th.getAttribute("data-sort-col"), 10);
-      var type = th.getAttribute("data-sort-type") || "string";
+    th.addEventListener("click", function () {
+      sortBy(th);
+    });
 
-      if (sortState.col === col) sortState.dir = -sortState.dir;
-      else {
-        sortState.col = col;
-        sortState.dir = 1;
-      }
-
-      rows.sort(function (a, b) {
-        return sortState.dir * compare(a, b, col, type);
-      });
-
-      rows.forEach(function (tr) {
-        tbody.appendChild(tr);
-      });
-
-      renumberRank(rows);
-
-      clearHeaderClasses();
-      th.classList.add(sortState.dir === 1 ? "sort-asc" : "sort-desc");
-    }
-    th.addEventListener("click", sortByHeader);
     th.addEventListener("keydown", function (e) {
       if (e.key === "Enter" || e.key === " ") {
         e.preventDefault();
-        sortByHeader();
+        sortBy(th);
       }
     });
   });

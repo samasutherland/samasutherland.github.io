@@ -6,8 +6,6 @@ categories: [llms]
 tags: []
 ---
 
-# Latent Attention
-
 One of the key innovations DeepSeek made when they disrupted the LLM space was the introduction of latent attention. 
 Latent attention decreases the parameter overhead of the attention mechanism by splitting it into two parts.
 The first part takes the embedding vector and reduces it to a vector of lower dimension via a rectangular matrix.
