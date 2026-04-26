@@ -191,10 +191,10 @@ The best way to learn is to do. I recently found out that hiring RTX 4090s on ru
 
 ### Posts
 <ul class="post-list">
-  {% assign ml_posts = site.categories.ml %}
-  {% if ml_posts and ml_posts.size > 0 %}
-    {% assign ml_posts = ml_posts | sort: "date" | reverse %}
-    {% for post in ml_posts %}
+  {% assign llm_posts = site.categories.lLMs %}
+  {% if llm_posts and llm_posts.size > 0 %}
+    {% assign llm_posts = llm_posts | sort: "date" | reverse %}
+    {% for post in llm_posts %}
       <li><a href="{{ post.url | relative_url }}">{{ post.title }}</a> — {{ post.date | date_to_string }}</li>
     {% endfor %}
   {% else %}

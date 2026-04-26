@@ -2,7 +2,7 @@
 layout: post
 title: "Latent Attention"
 date: 2026-04-25
-categories: [ml]
+categories: [lLMs]
 tags: []
 ---
 
