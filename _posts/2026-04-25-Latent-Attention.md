@@ -45,3 +45,20 @@ It seems that the main benefit of the projection is the KV caching after all, un
 
 ## Final performance
 As usual, two training runs with seeds 100 and 101 were performed and their final validation bpb was averaged. The projection dimension used was 64. Since 64/256 = 1/4, for SimpleStories with an embedding dimension of 288, the projection dimension used was 72. Here are the results:
+
+| Dataset       | Bits per Byte |
+|---------------|---------------|
+| BabyLM        | 1.36          |
+| SimpleStories | 0.58          |
+
+BabyLM training docker images: [seed 100](docker.io/snoodmcguinness/model_trainer:sha-31bd5f11f07fc76b8e4efc0d015e89fcdc889b03); [seed 101](docker.io/snoodmcguinness/model_trainer:sha-c7abf598df55eb53a67e50372e64ba1b0611402e)
+
+Example Generations:
+*caitlin stood on the* ground.
+*jayden had a jolly good time*.
+*in japanese culture, women are often* more than accurate.
+
+SimpleStories training docker images: [seed 100](docker.io/snoodmcguinness/model_trainer:sha-3e944e8c776064a82bcd3fe55f0e828817f1c1e8"); [seed 101](docker.io/snoodmcguinness/model_trainer:sha-62749e05a241442ba80670d9f557154e5316110c)
+*caitlin stood on the* edge of a cliff, gazing at the ocean below. a boy named samuel loved to explore the ocean. one day, he found a shell that shimmered like the stars. when he touched it, he was whisked away to a world of wonders. in this new place, he met a wise turtle named rita. "welcome, young one! what brings you here?" she asked. samuel replied, "i want to see the wonders of the sea." rita smiled and said, "then let\'s
+*jayden had a jolly good time*. one day, a girl named mia found a strange map in her attic. the map showed a path to a hidden treasure. excited, she decided to follow it. mia packed a small bag with snacks and a flashlight. she walked through the woods, feeling brave. the trees whispered secrets as she went deeper. suddenly, she heard a loud noise. it was a big bear! the bear looked hungry and hungry. mia thought quickly. she remembered the map and ran back to her house. she
+*in japanese culture, women are often* lost in thought. she was a great artist, but her heart was heavy. she had painted many things, but her art was not good enough. one day, she found an old paintbrush in her attic. it was dusty and had strange designs. she thought it could help her create something new. she took it to her workshop and began to paint. as she worked, she felt a spark of hope. but when she finished, she realized she had no paint. the brush was not what she
