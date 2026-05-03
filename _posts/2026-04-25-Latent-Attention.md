@@ -36,47 +36,93 @@ For each attention call, each query is compared to *many* keys and values, so pr
 Based on absolutely nothing but this unsubstantiated hand-wavy argument and the fact that DeepSeek didn't do it, I will not compress Q.
 
 ## Projection dim sweep
-I decided to sweep the projection dimension on the BabyLM dataset. The embedding dimension is 256, the qk dimension is 64, with 4 heads (so full dimension also 256).
-A full-rank matrix would use 256 * 256 = 65536 parameters, and a projection dim that matches this would use 2 * 256 * p_dim = 65536 -> p_dim = 128, so the projection dim has to be smaller than that.
-The sweep tests values 32, 64, 96, and 128. Too small, and the latent representation is not large enough to capture necessary features, degrading performance.
-Too large, and the reduced parameter count is outweighed by the additional matrix multiplications.
+I decided to sweep the projection dimension on the BabyLM dataset. The embedding dimension is 256, the qk dimension is 64, with 4 heads and the matrix is shared between both k and v, so the full final dimension is 512.
+A full-rank matrix would use 256 * 512 = 131072 parameters, and a projection dim that matches this would use (256 * p_dim) + (512 * p_dim) = 131072 -> p_dim = 170.6, so the projection dim has to be smaller than that in order to save parameters.
+We can calculate the same thing for FLOPs. 
+Assuming naive matmul, the cost of the unprojected attention is batch_dim * seq_dim * 256 * 512, and the latent version is batch_dim * seq_dim * 256 * p_dim + batch_dim * seq_dim * pdim * 512. 
+Dividing through by the batch and sequence dimensions, we arrive at the same crossover point for FLOPs
+The sweep tests values 16, 32, 48, 64, 80, 96, 112, 128, 192, and 256.
+These tests gave quite noisy results, so I ran each twice and averaged the results.
+I would expect projected dimension 171 to achieve approximately the same performance as the dense model since it uses the same number of parameters and compute.
+I would also guess that decreasing the projection dimension could improve the performance, as the reduced cost would allow more tokens to be processed.
+At some point, the expressivity of the reduced projection dimension will get so low that the performance will get worse again.
+Another scenario that could occur is if the expressivity of the dense attention is already saturated, the latent attention will perform strictly worse.
 
-The results of the sweep are in this graph: ![projection_sweep](/assets/img/lLM/projected_dimension.png)
-Unfortunately, while a projected dimension of 64 appears to be the sweet spot for performance, none were able to outperform the full-rank baseline. 
-All models processed about the same number of tokens/parameter, and they all had the same number of layers, meaning that any reduction in parameter count was offset by the increase in computation.
-It seems that the main benefit of the projection is the KV caching after all, unless the balance changes significantly with much larger models.
+The sweep gave me very confusing results.
+Firstly, the parameter count graph follows the predicted pattern, with the crossover at 171.
+![parameter_count_sweep](/assets/img/lLM/latent_attention/parameter_count.png)
+And the BPB results show a loss minimum at projection dim 96.
+![bpb_sweep](/assets/img/lLM/latent_attention/bpb.png)
+However, the unprojected baseline outperforms all projected experiments.
+Intuitively, this would indicate that the expressivity is saturated, but then I wouldn't expect to see the minimum at 96.
+To get to the bottom of this, I investigated the total tokens processed by each model.
+![token_count_sweep](/assets/img/lLM/latent_attention/token_count.png)
+The token counts are all over the place, not the smooth decrease I'd expect as projection_dim is increased. 
+The dense baseline actually achieved the highest token count of all.
+Maybe the total descent steps calculation is inaccurate and some are getting more time?
+Here is the plot of the tokens processed per second, which shows that while some may have gotten more total time, the actual *rates* are more noise than signal.
+![token_rate_sweep](/assets/img/lLM/latent_attention/token_rate.png)
+I'm not sure there's much that can be gleaned from this data except that latent attention does not help performance on a small restricted training budget, at least with this set up.
+One thing that can be investigated is compilation.
+With these small dimensions, the overhead of matmul kernel launches on the GPU may be affecting performance significantly.
+Fortunately, PyTorch provides a JIT compiler to try to mitigate these issues.
+I tested compiled versions of the baseline unprojected model and a latent attention model, each with three seeds.
+![compiled_token_rate](/assets/img/lLM/latent_attention/compiled/token_rate.png)
+This was a great success. Not only is the throughput massively higher, but it is also much less noisy.
+The increase in token rate leads to a distinct decrease in the BPB for the models:
+![compiled_bpb](/assets/img/lLM/latent_attention/compiled/bpb.png)
+The main problem with the compiled version is that the probes that calculate how many descent steps fit in 30 minutes are thrown off by the initial compilation.
+I ran the projection sweep again, and adjusted the warmup steps to 200 and memory test steps to 100 to attempt to account for the compilation time.
+While the runs still didn't go for the full anticipated 30 minutes, taking around 26 minutes instead, the results make a lot more sense than the previous graphs.
+The token rate graph now shows a smooth decrease in rate as projection dimension increases, with a high bar from the baseline model likely stemming from the GPU overhead arising splitting the KV multiplication into two separate multiplications.
+![final_token_rate](/assets/img/lLM/latent_attention/final/token_rate.png)
+The BPB graph is still a bit noisy at large projection dimensions:
+![final_bpb](/assets/img/lLM/latent_attention/final/bpb.png)
+But I think shows a couple of things quite clearly. 
+Firstly, the expected pattern is now seen. 
+The BPB decreases as projection dimension increases due to the increased expressivity of the layer.
+However, at a dimension of around 128, a minimum is achieved where above this the added cost restricts the number of tokens processed enough that the model starts to perform worse.
+Secondly, the overhead from breaking up the matrix multiplication drowns out any performance gain from reduced FLOP and parameter counts, at least at this small scale.
+This means that latent attention likely isn't a viable method for increasing training performance, and should be used for its primary use case of increased KV caching efficiency.
 
 ## Final performance
-As usual, two training runs with seeds 100 and 101 were performed and their final validation bpb was averaged. The projection dimension used was 64. Since 64/256 = 1/4, for SimpleStories with an embedding dimension of 288, the projection dimension used was 72. Here are the results:
 
-| Dataset       | Bits per Byte |
-|---------------|---------------|
-| BabyLM        | 1.36          |
-| SimpleStories | 0.58          |
+The performance of the compiled baseline model and the best-performing latent attention model are found in the table below, averaged over two seeds each.
+I've decided to stop also testing on SimpleStories. The main purpose of this project is to have fun, and supporting two datasets was making me have less fun.
 
-I think my predictions were a bit off here. Both models performed marginally worse than the fully dense equivalents.
-I don't think this has anything to do with the width vs depth preference found in the [baseline transformer](/llms/2026/04/03/lLM-Training-Design.html) experiment, as both datasets were affected similarly.
-I'm actually impressed that the models perform so similarly given the reduction in parameter counts.
-It implies that the latent attention *is* an effective method for reducing parameter counts while retaining accuracy.
-Unfortunately, in this compute-restricted scenario, the overhead introduced by the additional matmuls eliminate any performance gains stemming from reduced parameter counts, resulting in marginally worse performance at fixed compute.
-The performance per parameter is better though, implying that low-rank decompositions can help the performance of models.
-The next step is to find low-rank decompositions that effectively preserve accuracy without impacting performance too much - a tough task given that this method only introduces a single extra matmul per layer and yet still doesn't cost more to compute than is saved by the reduction in parameters!
+| Model             | Bits per Byte |
+|-------------------|---------------|
+| Compiled Baseline | 1.31          |
+| Latent Attention  | 1.32          |
+
 
 ## Benchmark generations and training commits
+
 Here are the generations from the standard prompts and the links to the specific commits used to train the models.
 
-BabyLM training docker images: 
-[seed 100](https://github.com/samasutherland/little-language-models/commit/31bd5f11f07fc76b8e4efc0d015e89fcdc889b03)
-[seed 101](https://github.com/samasutherland/little-language-models/commit/c7abf598df55eb53a67e50372e64ba1b0611402e)
+#### Compiled Baseline
+[seed 43](https://github.com/samasutherland/little-language-models/commit/3effcb7d92d8dc0177f93afd551cc8e1ce3fbd84)
+
+[seed 42](https://github.com/samasutherland/little-language-models/commit/0141f319f1e142037cb655f9608a6e78e410cf91)
 
 Example Generations:
-*caitlin stood on the* ground.
-*jayden had a jolly good time*.
-*in japanese culture, women are often* more than accurate.
 
-SimpleStories training docker images:
-[seed 100](https://github.com/samasutherland/little-language-models/commit/3e944e8c776064a82bcd3fe55f0e828817f1c1e8)
-[seed 101](https://github.com/samasutherland/little-language-models/commit/62749e05a241442ba80670d9f557154e5316110c)
-*caitlin stood on the* edge of a cliff, gazing at the ocean below. a boy named samuel loved to explore the ocean. one day, he found a shell that shimmered like the stars. when he touched it, he was whisked away to a world of wonders. in this new place, he met a wise turtle named rita. "welcome, young one! what brings you here?" she asked. samuel replied, "i want to see the wonders of the sea." rita smiled and said, "then let\'s
-*jayden had a jolly good time*. one day, a girl named mia found a strange map in her attic. the map showed a path to a hidden treasure. excited, she decided to follow it. mia packed a small bag with snacks and a flashlight. she walked through the woods, feeling brave. the trees whispered secrets as she went deeper. suddenly, she heard a loud noise. it was a big bear! the bear looked hungry and hungry. mia thought quickly. she remembered the map and ran back to her house. she
-*in japanese culture, women are often* lost in thought. she was a great artist, but her heart was heavy. she had painted many things, but her art was not good enough. one day, she found an old paintbrush in her attic. it was dusty and had strange designs. she thought it could help her create something new. she took it to her workshop and began to paint. as she worked, she felt a spark of hope. but when she finished, she realized she had no paint. the brush was not what she
+*caitlin stood on the* side of the house.
+
+*jayden had a jolly good time*.
+
+*in japanese culture, women are often* called \"saturdaya\" (the \"saturdaya\" or \"saturdaya\").
+
+
+#### Latent Attention
+[seed 43](https://github.com/samasutherland/little-language-models/commit/915822d49fce878ee58cff182c04d4100495e980)
+
+[seed 42](https://github.com/samasutherland/little-language-models/commit/09001b21de0980bfe36f2e2a9f802f644d988ddb)
+
+Example Generations:
+
+*caitlin stood on the* door.
+
+*jayden had a jolly good time*.
+
+*in japanese culture, women are often* called \"survivals\".
