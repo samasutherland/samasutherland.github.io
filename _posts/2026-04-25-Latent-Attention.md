@@ -21,7 +21,7 @@ The two-stage construction of latent attention is not strictly comparable to an 
 However, it does constrain the rank of the combined transformation the same way as performing an SVD and truncating the singular values would.
 
 While I think that the primary concern for the DeepSeek researchers was the inference efficiency and therefore the effectiveness of the KV caching, for a fixed training compute budget I am interested to find out if the increased parameter efficiency results in models that perform better than full-rank attention.
-My prediction is that BabyLM will benefit from latent attention, as it will allow an increase in the depth of the model for the same parameter count, but simplestories won't benefit too much due to its preference for width over depth.
+My prediction is that BabyLM will benefit from latent attention, as it will allow an increase in the depth of the model for the same parameter count.
 ## Implementation
 The implementation of latent attention is very simple. In my repository, I simply override the KV transformation with the latent version:
 ```python
