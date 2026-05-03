@@ -1,12 +1,18 @@
 - model: Baseline - Transformer
-  babylm_param_count: 11M
+  babylm_param_count: 11.0M
   babylm_bpb: 1.33
   simplestories_param_count: 7.3M
   simplestories_bpb: 0.57
   link: /llms/2026/04/03/lLM-Training-Design.html
 - model: Latent Attention
-  babylm_param_count: 10M
-  babylm_bpb: 1.35
-  simplestories_param_count: 5.9M
-  simplestories_bpb: 0.58
+  babylm_param_count: 10.6M
+  babylm_bpb: 1.32
+  simplestories_param_count: n/a
+  simplestories_bpb: n/a
+  link: /llms/2026/04/25/Latent-Attention.html
+- model: Compiled Baseline
+  babylm_param_count: 11.0M
+  babylm_bpb: 1.31
+  simplestories_param_count: n/a
+  simplestories_bpb: n/a
   link: /llms/2026/04/25/Latent-Attention.html
