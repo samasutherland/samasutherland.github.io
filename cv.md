@@ -83,9 +83,9 @@ Oxford
 
 **Wanstead High School — A levels and GCSEs**
 
-*2013–2015:* Maths A*, Further Maths A*, Physics A*, Chemistry A, Music A  
+*2013–2015:* Maths A\*, Further Maths A\*, Physics A\*, Chemistry A, Music A  
 
-*GCSEs 2008–2013:* 8 A*’s and 4 A’s including A* in Maths, Physics and English Literature
+*GCSEs 2008–2013:* 8 A\*’s and 4 A’s including A\* in Maths, Physics and English Literature
 
 ---
 
