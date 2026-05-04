@@ -46,7 +46,7 @@ Hatfield
 Oxford
 
 - Trained a model on satellite data to detect Pockets of Open Cells in clouds on an unprecedented scale
-- Paper resulting from subsequent analysis won best paper award at ICML 2019
+- Paper resulting from subsequent analysis won the climate change AI workshop best paper award at ICML 2019
 
 **Centre for Applied Superconductivity — Summer research project**
 
