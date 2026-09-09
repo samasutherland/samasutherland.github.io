@@ -15,7 +15,7 @@ author:
 minima:
   nav_pages:
     - cv.md
-    - lLMs.md
+    - projects.md
   social_links:
     - title: GitHub
       icon: github
