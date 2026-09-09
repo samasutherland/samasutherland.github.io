@@ -1,6 +1,6 @@
 ---
 layout: post
-title: "Second-Order Jacobian Lens"
+title: "Feasibility Study for a Second Order J-Lens"
 date: 2026-09-09
 categories: [projects]
 tags: []
@@ -152,10 +152,10 @@ The broader lesson I take from this is about sequencing. My initial plan was to 
 
 ### References
 
-<a id="1">[1]</a> W. Gurnee, N. Sofroniew, A. Pearce, M. Piotrowski, I. Kauvar, R. Chen, A. Soligo, P. Bogdan, E. Ong, R. Wang, B. Thompson, D. Abrahams, S. Kantamneni, E. Ameisen, J. Batson, and J. Lindsey, "Verbalizable Representations Form a Global Workspace in Language Models," Anthropic, Transformer Circuits Thread, July 2026. <https://transformer-circuits.pub/>
+<a id="1">[1]</a> W. Gurnee, N. Sofroniew, A. Pearce, M. Piotrowski, I. Kauvar, R. Chen, A. Soligo, P. Bogdan, E. Ong, R. Wang, B. Thompson, D. Abrahams, S. Kantamneni, E. Ameisen, J. Batson, and J. Lindsey, "Verbalizable Representations Form a Global Workspace in Language Models," arXiv preprint arXiv:2607.15495, July 2026. <https://doi.org/10.48550/arXiv.2607.15495>
 
-<a id="2">[2]</a> X. Gong and T. Wang, "The First Token Is a Clue: Verbalizing Multi-Token Concepts from the J-lens," arXiv preprint, September 2026.
+<a id="2">[2]</a> X. Gong and T. Wang, "The First Token Is a Clue: Verbalizing Multi-Token Concepts from the J-lens," arXiv preprint arXiv:2608.31084, September 2026. <https://doi.org/10.48550/arXiv.2608.31084>
 
-<a id="3">[3]</a> C. Blank, B. Agam, and N. Nanda, "R-lens: Making J-lens More Faithful on Early Layers," AI Alignment Forum, August 2026. <https://www.alignmentforum.org/>
+<a id="3">[3]</a> C. Blank, B. Agam, and N. Nanda, "R-lens: Making J-lens More Faithful on Early Layers," AI Alignment Forum, August 2026. <https://www.lesswrong.com/posts/nv8oedrnLXKRzNEL9/r-lens-making-j-lens-more-faithful-on-early-layers>
 
-<a id="4">[4]</a> J. Kramár, T. Lieberum, R. Shah, and N. Nanda, "AtP*: An Efficient and Scalable Method for Localizing LLM Behaviour to Components," arXiv preprint arXiv:2403.00745, March 2024. <https://arxiv.org/abs/2403.00745>
+<a id="4">[4]</a> J. Kramár, T. Lieberum, R. Shah, and N. Nanda, "AtP*: An Efficient and Scalable Method for Localizing LLM Behaviour to Components," arXiv preprint arXiv:2403.00745, March 2024. <https://doi.org/10.48550/arXiv.2403.00745>

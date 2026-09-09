@@ -12,7 +12,7 @@ An attempt to train the best language model I can in 30 minutes of GPU time, wit
 sortable leaderboard and write-ups of each model and architecture experiment.
 [Read more]({{ '/llms/' | relative_url }}).
 
-### Second-Order Jacobian Lens
+### Feasibility Study for a Second Order J-Lens
 
 A feasibility study, started as a MATS application project, into whether the Jacobian
 Lens can be extended with second-order information to surface multi-token concepts and
