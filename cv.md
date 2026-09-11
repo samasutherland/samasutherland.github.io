@@ -16,9 +16,9 @@ permalink: /cv/
 
 University of New South Wales, Sydney
 
-- Designed, built, and tested a novel reservoir computing device, “Watermelon”, based on an array of phosphorus-doped silicon quantum dots, which became a primary revenue stream for the company
 - Built multi-node DDP training with gradient-propagating collectives in PyTorch for Hamiltonian learning
 - Derived and implemented a solver-agnostic backward pass for tensor network eigensolvers, eliminating the dependence of gradient cost and memory on solver iteration count
+- Designed and tested a novel reservoir computing device, “Watermelon”, based on an array of phosphorus-doped silicon quantum dots, which became a primary revenue stream for the company
 
 **Optiver — Quantitative researcher intern (November 2023 – February 2024)**
 
