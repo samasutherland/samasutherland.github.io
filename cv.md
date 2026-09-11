@@ -6,7 +6,7 @@ permalink: /cv/
 
 *Quantum computing PhD with experience in numerical methods and applied machine learning. I specialise in differentiable programming and tensor networks, with keen interest in applying these techniques in frontier AI models.*
 
-[Download abridged PDF version of this CV]({{ '/assets/Sam-Sutherland-CV-28-04-2026.pdf' | relative_url }})
+[Download abridged PDF version of this CV]({{ '/assets/Sam-Sutherland-CV-06-09-2026.pdf' | relative_url }})
 
 ---
 
@@ -17,29 +17,29 @@ permalink: /cv/
 University of New South Wales, Sydney
 
 - Designed, built, and tested a novel reservoir computing device, “Watermelon”, based on an array of phosphorus-doped silicon quantum dots, which became a primary revenue stream for the company
-- Created a differentiable simulator using PyTorch for tuning and designing quantum devices
-- Derived and implemented an end-to-end differentiable pipeline for eigensolving in tensor network algorithms
+- Built multi-node DDP training with gradient-propagating collectives in PyTorch for Hamiltonian learning
+- Derived and implemented a solver-agnostic backward pass for tensor network eigensolvers, eliminating the dependence of gradient cost and memory on solver iteration count
 
 **Optiver — Quantitative researcher intern (November 2023 – February 2024)**
 
 Sydney
 
 - Completed accelerated training in market making and quantitative trading
-- Evaluated the viability of a news-based trading signal using Bloomberg headline data
+- Evaluated a news-based trading signal on Bloomberg headlines; found no edge at actionable latency
 - Developed improved estimators of intermediate-scale volatility in global equity indices
 
 **Ocado Technology — Innovation engineer (April – December 2020)**
 
 Hatfield
 
-- Applied representation learning techniques to Ocado product image data
+- Applied self-supervised pretraining (MoCo, BYOL) to warehouse basket imagery for automated pick verification; found limited gains over supervised training given the abundance of implicit labels
 - Evaluated multiphysics simulation packages and advised on their usage
 
 **Ocado Technology — Machine learning internship (July – December 2019)**
 
 Hatfield
 
-- Built, tested and integrated an image segmentation model on a robot platform for autonomous navigation in complex environments
+- Built an autonomous navigation stack on a mobile robot platform: SLAM-based mapping and routing with a vision model for obstacle detection, demonstrated end-to-end in a live office environment
 
 **University of Oxford — MPhys research project (2018–2019)**
 
@@ -63,6 +63,20 @@ Oxford
 - Communicated effectively with a multi-cultural group of students and professors to maximise the value of the course on simulation techniques
 - Implemented and optimised these techniques in FORTRAN to achieve results comparable to papers in this field
 - Utilised their linux compute cluster to run simulations that I had parallelised myself using MPI
+
+---
+
+## Independent Research
+
+**[Second-Order Jacobian Lens]({{ '/projects/second-order-jacobian-lens/' | relative_url }}) — Interpretability study (2026)**
+
+- Showed low-rank sketching of the Jacobian Lens with task-agnostic bases recovers no more than a random subspace, while a lens-derived basis reaches full performance at 10% of the dimensions
+- Showed the second-order interaction of token-gated routing is step-like, so gradient-based estimation reports false negatives for most token pairs
+
+**[little Language Models]({{ '/llms/' | relative_url }}) — Transformer architecture experiments (2026)**
+
+- Built a config-driven, Pydantic-validated framework that compares transformer variants at equal compute
+- Made every result reproducible from a commit: containerised build, ephemeral GPU provisioning, and training through evaluation run automatically on push
 
 ---
 
@@ -102,6 +116,8 @@ Oxford
 - Transformer architectures  
 - Differentiable programming  
 - Optimisation methods  
+- Self-supervised learning  
+- Distributed training  
 
 **Implementation**
 
